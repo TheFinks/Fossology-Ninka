@@ -10,4 +10,5 @@ Contributors
 * Doug Richardson
 * James Thompson
 * Jon von Kampen
+
 overseen by [Matt Germonprez](http://myweb.unomaha.edu/~mgermonprez/vita.html) for CSCI 4900/Internet Systems Development (spring 2014) at the [University of Nebraska at Omaha](http://www.unomaha.edu).
