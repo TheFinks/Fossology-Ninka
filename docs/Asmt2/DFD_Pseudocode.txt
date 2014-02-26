@@ -20,11 +20,11 @@ TEXT PARSER
 --IF R1 has license AND R2 has NONE or ERROR
 ---WRITE license(R1) TO COMBINED_OUT
 --ELSE IF R2 has license and R1 has NONE or ERROR
----WRITE license(R1) TO COMBINED_OUT
+---WRITE license(R2) TO COMBINED_OUT
 --ELSE IF license(R1) == license(R2)
 ---WRITE license(R1) TO COMBINED_OUT #R1 and R2 are identical, either one works
 --ELSE IF license(R1) != license(R2) #assuming R1 and R2 have licenses
----WRITE "LICENSE_DECLARED = NOASSERTION, COMMENTS = CONFLICT" TO COMBINED OUT
+---WRITE "LICENSE_DECLARED = NOASSERTION, COMMENTS = CONFLICT" TO COMBINED_OUT
 #not the actual output format, just an example for representation purposes
 
 SPDX GENERATOR
