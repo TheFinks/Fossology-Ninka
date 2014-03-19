@@ -6,6 +6,7 @@ import os
 import subprocess
 import tarfile
 import zipfile
+import json
 from run_scanners import ninka_scan, foss_scan
 from output_parser import ninka_parser, foss_parser, combined_parser
 '''
@@ -233,6 +234,43 @@ def parse_combined_file(file_name):
 	
 	return output
 
+def generate_json(scan_list):
+    """
+    Generates a JSON string from a list of dual-scan results.
+    
+    Results are 4-tuples of the format:
+        (package_name, file_name, license_concluded, comments)
+    
+    The JSON string is intended to be integrated into an overall SPDX document,
+    as reflected by the key names. This function handles both single file and
+    package scans.
+    """
+    
+    results = {
+        "package_name": "NONE",
+        "file_results": {}
+    }
+    """
+    package_name should be set other than "NONE" if more than one file is
+    present, but it may be set if there is only one file that is part of a
+    larger package.
+    """
+    
+    for scan in scan_list:
+        package_name = scan[0]
+        file_name = scan[1]
+        concluded = scan[2]
+        comments = scan[3]
+    
+        if scan[0] != "NONE":
+            results["package_name"] = package_name
+        results["file_results"][file_name] = {
+            "licenseConcluded": concluded,
+            "licenseComments": comments
+        }
+    
+    return json.dumps(results)
+
 if len(sys.argv) < 2:
 	print("USAGE: " + sys.argv[0] + " file")
 	print("EXAMPLE: " + sys.argv[0] + " ninka.pl")
@@ -253,4 +291,9 @@ else:
 	parse_output(sys.argv[1], is_archive, F_out, N_out)
 	subprocess.call(["rm", F_out])
 	subprocess.call(["rm", N_out])
-	print(str(parse_combined_file(combined_out)))
+	#print(str(parse_combined_file(combined_out)))
+    scan_list = str(parse_combined_file(combined_out))
+    if scan_list == "False":
+        raise Exception("Failed to parse FOSSology and Ninka scanner output.")
+    else:
+        print(generate_json(scan_list))
