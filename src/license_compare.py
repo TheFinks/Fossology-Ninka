@@ -72,6 +72,7 @@ License_Approximations = [
 	]
 
 Licenses = [
+	("None", "NONE", "NONE"), #This is confirmation of no license
 	("GPL_v2", "GPLv2", "GPL-2.0"),
 	("GPL_v2+", "GPLv2+", "GPL-2.0+"),
 	(False, "LesserGPLv2.1+", "LGPL-2.1+"),
@@ -111,7 +112,7 @@ Licenses = [
 	("Artistic_v2.0", False, "Artistic-2.0"),
 	("Attribution-Assurance", False, "AAL"),
 	("BitTorrent_v1.0", False, "BitTorrent-1.0"),
-	("BitTorrent_v1.1", False, "BitTorrent-1.1").
+	("BitTorrent_v1.1", False, "BitTorrent-1.1"),
 	("Boost_v1.0", "boostV1", "BSL-1.0"), 
 	("CeCILL_v1", False, "CECILL-1.0"),
 	("CeCILL_v1.1", False, "CECILL-1.1"), 
@@ -195,7 +196,7 @@ Licenses = [
 	("IBM-PL_v1.0", False, "IPL-1.0"),
 	#Ninka had IBMv1, but I didn't know if it was this one
 	(False, False, "Imlib2"),
-	(False, False "IJG"),
+	(False, False, "IJG"),
 	#fossology had JPEG/netpbm, but I don't know if its "independent JPEG"
 	("Intel", False, "Intel"),
 	#Ninka had IntelACPILic, not sure if it is Intel Open Source License
@@ -290,7 +291,7 @@ Licenses = [
 	("Sun-PL_v1.0",False, "SPL-1.0"),
 	(False, False, "Watcom-1.0"),
 	#Fossology had a licesne called Sybase, not sure if it's the same
-	(False, False "NCSA"),
+	(False, False, "NCSA"),
 	(False, False, "VSL-1.0"),
 	#Fossology has Vovida, but I don't know if it's 1.0
 	("W3C", "W3CLic", "W3C"),
@@ -302,10 +303,10 @@ Licenses = [
 	(False, False, "YPL-1.0"),
 	(False, False, "YPL-1.1"),
 	#Fossology had Yahoo, but no version number
-	(False, False "Zimbra-1.3"),
+	(False, False, "Zimbra-1.3"),
 	("zlib/libpng", False ,"Zlib"),
-	(False, False "ZPL-1.1"),
-	("Zope-PL_v2.0", False "ZPL-2.0"),
-	(False, False "ZPL-2.1"),
-	(False, False "Unlicense")
+	(False, False, "ZPL-1.1"),
+	("Zope-PL_v2.0", False, "ZPL-2.0"),
+	(False, False, "ZPL-2.1"),
+	(False, False, "Unlicense")
 	]

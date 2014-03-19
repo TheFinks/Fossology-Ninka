@@ -7,7 +7,7 @@ import subprocess
 import tarfile
 import zipfile
 from run_scanners import ninka_scan, foss_scan
-from output_parser import ninka_parser, foss_parser
+from output_parser import ninka_parser, foss_parser, combined_parser
 '''
 	use run_scans to run the scans from another process
 	otherwise use command line arguments
@@ -203,6 +203,36 @@ else:
 	f.close()
 '''
 
+def parse_combined_file(file_name):
+	f = open(file_name, 'r')
+	archive_name = "(ERROR)"
+	file_name = "(ERROR)"
+	license_declared = "(ERROR)"
+	comments = "(ERROR)"
+	output = False
+
+	for line in f:
+		file_info = line.split(";")
+		archive_name = file_info[0]
+		file_name = file_info[1]
+		foss_out = file_info[2].split(",")
+		ninka_out = file_info[3].split(",")
+
+		if foss_out[0] != "ERROR" and ninka_out[0] != "ERROR":
+			result = combined_parser(foss_out, ninka_out)
+			license_declared = result[0]
+			comments = result[1]
+			if not output:
+				temp = (archive_name, file_name,
+					license_declared, comments)
+				output = [temp]
+			else:
+				temp = (archive_name, file_name,
+					license_declared, comments)
+				output.append(temp)
+	
+	return output
+
 if len(sys.argv) < 2:
 	print("USAGE: " + sys.argv[0] + " file")
 	print("EXAMPLE: " + sys.argv[0] + " ninka.pl")
@@ -215,8 +245,12 @@ else:
 	N_out += out_name + ".N_out.txt"
 	F_out = paths.SCANNER_OUTPUT_PATH + "/"
 	F_out += out_name + ".F_out.txt"
+	combined_out = paths.SCANNER_OUTPUT_PATH + "/"
+	combined_out += out_name + ".dual_out.txt"
 
-	is_archive = tarfile.is_tarfile(sys.argv[1]) or zipfile.is_zipfile(sys.argv[1])
+	is_archive = tarfile.is_tarfile(sys.argv[1]) or zipfile.is_zipfile(
+		sys.argv[1])
 	parse_output(sys.argv[1], is_archive, F_out, N_out)
 	subprocess.call(["rm", F_out])
 	subprocess.call(["rm", N_out])
+	print(str(parse_combined_file(combined_out)))
