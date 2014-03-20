@@ -255,8 +255,9 @@ def generate_json(scan_list):
     present, but it may be set if there is only one file that is part of a
     larger package.
     """
-    
     for scan in scan_list:
+        #print(scan)
+        #print(scan_list[0])
         package_name = scan[0]
         file_name = scan[1]
         concluded = scan[2]
@@ -292,8 +293,9 @@ else:
 	subprocess.call(["rm", F_out])
 	subprocess.call(["rm", N_out])
 	#print(str(parse_combined_file(combined_out)))
-    scan_list = str(parse_combined_file(combined_out))
-    if scan_list == "False":
-        raise Exception("Failed to parse FOSSology and Ninka scanner output.")
-    else:
-        print(generate_json(scan_list))
+	scan_list = parse_combined_file(combined_out)
+	if not scan_list:
+		raise Exception(
+			"Failed to parse FOSSology and Ninka scanner output.")
+	else:
+		print(generate_json(scan_list))
