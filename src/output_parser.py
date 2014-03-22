@@ -119,10 +119,10 @@ def combined_parser(foss_out, ninka_out):
                     if where_found[0] and where_found[1]:
                         conflict = True
                         '''
-                        A conflict occurs when
-                        Both findings have licenses
-                        (both where_found's are true)
-                        but one is not in the other set
+                            A conflict occurs when
+                            Both findings have licenses
+                            (both where_found's are true)
+                            but one is not in the other set
                         '''
 
     if not conflict:
@@ -130,10 +130,14 @@ def combined_parser(foss_out, ninka_out):
             license_declared = lic_join(final_out)
             comments = "#Fossology #Ninka"
             '''
-            This is if both scanners have valid findings
-            and no conflcits occur
+                This is if both scanners have valid findings
+                and no conflcits occur
             '''
         elif where_found[0] and not where_found[1]:
+            if foss_lic.strip() == "None":
+                final_out = ["NOASSERTION"]
+                #This is to avoid displaying None as a declared license
+                #("None" from fossology doubles as the unknown declaration)
             if not final_out:
                 final_out = [lic_compare(foss_lic, False)]
             else:
@@ -142,7 +146,10 @@ def combined_parser(foss_out, ninka_out):
             comments = "#Fossology (names may not be SPDX standards compliant)"
             #This is if ONLY fossology has valid findings
         else:
-            if not final_out:
+            if ninka_lic.strip() == "UNKNOWN":
+                final_out = ["NOASSERTION"]
+                #This is to avoid displaying "UNKNOWN" as a declared license
+            elif not final_out:
                 final_out = [lic_compare(False, ninka_lic)]
             else:
                 final_out.append(lic_compare(False, ninka_lic))
@@ -151,11 +158,11 @@ def combined_parser(foss_out, ninka_out):
             #This is if ONLY ninka has valid findings
     else:
         '''
-        On the event of a conflict, the license declared is
-        NOASSERTION, and the comments state the license list
+            On the event of a conflict, the license declared is
+            NOASSERTION, and the comments state the license list
 
-        (because of time constraints, this is the findings in
-        verbatim from the scans, and not adjusted for SPDX-1.19)
+            (because of time constraints, this is the findings in
+            verbatim from the scans, and not adjusted for SPDX-1.19)
         '''
         comments = "#Fossology "
         comments += lic_join(foss_out)
@@ -172,19 +179,24 @@ def combined_parser(foss_out, ninka_out):
 #This compares the licenses with a comparison dictionary
 def lic_compare(foss_out, ninka_out):
     match = False
+
+    #Pre-declaring some booleans to make later code more readable
+
     ninka_lic_found = ninka_out != "UNKNOWN"
     foss_lic_found = foss_out != "None"
     error_found = foss_out == "ERROR" and ninka_out == "ERROR"
     no_license = foss_out == "None" and ninka_out == "NONE"
     valid_search = ninka_lic_found and not error_found
     valid_search = valid_search and not no_license
-    
+
+    #If both fossology and ninka have valid output    
     if(foss_out and ninka_out):
         if valid_search:
             for relation in license_compare.Licenses:
                 if match:
                     break
                 final = len(relation) - 1
+                #The SPDX license name is ALWAYS last on the comparison tuples
                 if foss_out == str(relation[0]):
                     if ninka_out.rstrip() == str(relation[1]):
                         match = relation[final]
@@ -192,6 +204,7 @@ def lic_compare(foss_out, ninka_out):
         elif no_license:
             match = "NONE"
 
+    #if ONLY fossology has a valid output
     elif(foss_out and not ninka_out):
         if foss_out != "None":
             for relation in license_compare.Licenses:
@@ -202,6 +215,7 @@ def lic_compare(foss_out, ninka_out):
             if not match:
                 match = foss_out
 
+    #If ONLY ninka has a valid output
     elif(ninka_out and not foss_out):
         if ninka_out != "UNKNOWN":
             for relation in license_compare.Licenses:
@@ -238,7 +252,13 @@ def lic_found(foss_out, ninka_out):
 
     return (foss_found, ninka_found)
     
+'''
+    This method takes multiple conjunctive licenses and concatenates them
+    with AND (the SPDX standard).  The default input is separated by commas.
 
+    Currently, there is no way to handle disjunctive licenses (that would be
+    separated by OR in the SPDX 1.2 spec).
+'''
 def lic_join(lic_list):
     result = "ERROR" #Shold never come up
     if len(lic_list) > 1:
