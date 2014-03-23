@@ -21,7 +21,6 @@ where files.py says they are (even if it's just checking if a file exists in
 that location).
 """
 
-import paths
 import sys
 import os
 import subprocess
@@ -30,6 +29,7 @@ import zipfile
 import json
 import sys
 
+import paths
 from run_scanners import ninka_scan, foss_scan
 from output_parser import ninka_parser, foss_parser, combined_parser
 
@@ -47,7 +47,7 @@ def archive_scan(archive, scan_type, f_name):
     that the tarfile and zipfile Python packages have identical method names.
     """
     if not f_name:
-        print("Error: Must specify an output file")
+        print("ERROR: Must specify an output file", file=sys.stderr)
         archive.close()
         exit(1)
     else:
@@ -83,7 +83,7 @@ def run_scans(target):
     """
     Runs both FOSSology and Ninka on a given file or package.
     """
-    print("creating directories needed for the scanners to work")
+    print("Creating directories needed for the scanners to work")
 
     """
     Checks to see if the paths we need are there
@@ -110,51 +110,52 @@ def run_scans(target):
     foss_out += out_name + ".F_out.txt"
     check_file(foss_out)
 
-    print("checking file format")
+    print("Checking file format")
 
     if tarfile.is_tarfile(target):
         print(target + " identified as TAR file")
         archive = tarfile.open(target)
-        print("extracting data")
+        print("Extracting data")
         archive.extractall(paths.TEMP_ARCHIVE_UNPACK_PATH)
-        print("starting ninka scan")
+        print("Starting Ninka scan")
         archive_scan(archive, 'n', ninka_out)
-        print("ninka scan finished")
-        print("starting fossology scan")
+        print("Ninka scan finished")
+        print("Starting FOSSology scan")
         archive_scan(archive, 'f', foss_out)
-        print("fossology scan finished")
+        print("FOSSology scan finished")
         archive.close()
 
     #This is the same as the tarfile method but with zipfile
     elif zipfile.is_zipfile(target):    
         print(target + " identified as ZIP file")
         archive = zipfile.open(target)
-        print("extracting data")
+        print("Extracting data")
         archive.extractall(paths.TEMP_ARCHIVE_UNPACK_PATH)
-        print("starting ninka scan")
+        print("Starting Ninka scan")
         archive.scan(archive,'n', ninka_out)
-        print("ninka scan finished")
-        print("starting fossology scan")
+        print("Ninka scan finished")
+        print("Starting FOSSology scan")
         archive.scan(archive,'f', foss_out)
-        print("fossology scan finished")
+        print("FOSSology scan finished")
         archive.close()
     
     else: #assumes a single file
-        print("file is either not an archive or an unrecognized format")
+        print("File is either not an archive or an unrecognized format;"
+            " scanning as single file")
         path = paths.TEMP_ARCHIVE_UNPACK_PATH + "/" + target
         subprocess.call(["cp", target, paths.TEMP_ARCHIVE_UNPACK_PATH])
-        #first with ninka
+        #first with Ninka
         n_file = open(ninka_out, 'w')
-        print("starting ninka scan")
+        print("Starting Ninka scan")
         n_file.write(ninka_scan(path))
-        print("ninka scan fnished")
+        print("Ninka scan fnished")
         n_file.close()
 
-        #next with fossology
+        #next with FOSSology
         f_file = open(foss_out, 'w')
-        print("starting fossology scan")
+        print("Starting FOSSology scan")
         f_file.write(foss_scan(path))
-        print("fossology scan finished")
+        print("FOSSology scan finished")
         f_file.close()
     
     #clean()
@@ -168,13 +169,14 @@ def parse_output(target, is_archive, foss_file, ninka_file):
     """
     Parses the FOSSology and Ninka scan output, and places the results in a
     unified file (for our internal use).
+    
+    The file format is archive_name;file_name;FOSSology_output;ninka_output
     """
     if not os.path.isfile(foss_file):
-        print("ERROR: " + foss_file + " not found")
+        print("ERROR: " + foss_file + " not found", file=sys.stderr)
         exit(1)
-
     elif not os.path.isfile(ninka_file):
-        print("ERROR: " + ninka_file + " not found")
+        print("ERROR: " + ninka_file + " not found", file=sys.stderr)
         exit(1)
     else:
         out_name = get_file_from_absolute_path(target)
@@ -191,13 +193,13 @@ def parse_output(target, is_archive, foss_file, ninka_file):
         foss = open(foss_file, 'r')
         ninka = open(ninka_file, 'r')
         output_file = open(combined_out, 'w')
-        l1 = str(foss.read()).split("\n")
-        l2 = str(ninka.read()).split("\n")
+        foss_lines = str(foss.read()).split("\n")
+        ninka_lines = str(ninka.read()).split("\n")
         #If not equal, go with the shortest one, will put in later
-        if len(l1) == len(l2):
-            for i in range(0, len(l1) - 1):
-                foss_out = foss_parser(l1[i])
-                ninka_out = ninka_parser(l2[i])
+        if len(foss_lines) == len(ninka_lines):
+            for i in range(0, len(foss_lines) - 1):
+                foss_out = foss_parser(foss_lines[i])
+                ninka_out = ninka_parser(ninka_lines[i])
                 if foss_out[0].strip() == ninka_out[0].strip():
                     output = archive_name + ";"
                     output += foss_out[0].strip() + ";"
@@ -216,7 +218,7 @@ def parse_combined_file(file_name):
     results in a tuple that can be easily translated to a JSON object for use
     with SPDX 1.2.
 
-    The input format is archive_name;file_name;fossology_output;ninka_output
+    The input format is archive_name;file_name;FOSSology_output;ninka_output
 
     The output format is (archive_name, file_name, license_concluded, comments)
     """
@@ -288,7 +290,7 @@ def generate_json(scan_list):
     return json.dumps(results)
 
 if len(sys.argv) < 2:
-    print("USAGE: " + sys.argv[0] + " file")
+    print("USAGE: " + sys.argv[0] + " file_or_package")
     print("EXAMPLE: " + sys.argv[0] + " ninka.pl")
 
 else:
