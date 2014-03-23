@@ -1,54 +1,43 @@
 #!/usr/bin/python
 
-'''
-This file is written by Doug Richardson, with the help of Jon von Kampen
-and James Thompson.
+"""
+Canonicalizes the licenses found in FOSSology and Ninka, which use different
+terminology (for example, GPLv2 is "GPL_v2" in FOSSology and "GPLv2" in Ninka).
+Also contains the SPDX 1.19 terminology when applicable.
 
-This file is licensed under the Apache 2.0 License (because Matt insisted)
+Terminology sources:
+- FOSSology: The old FOSSology dictionary
+  U{http://www.fossology.org/attachments/3375/license_list_old.txt}
+- Ninka: In Ninka 1.1, the file rules.dict
+  U{https://github.com/dmgerman/ninka/blob/master/matcher/rules.dict}
+  (Warning: It is somewhat difficult to read.)
+- SPDX 1.19: U{http://spdx.org/licenses/}.
 
-The purpose of this file is to compare the licesnses found in...
-...Ninka and Fossology, whom use different terminology.
-(for example, GPLv2 is "GPL_v2" in fossology and "GPLv2" in Ninka)
-This file will also contain the SPDX 1.19 definition when applicable
-
-The format is as follows, (Fossology_output, Ninka_output, SPDX_name)
-If any non-matching licesnses occur (for example, only Fossology reads...
-...license-X), then any "blank spots" will be marked as False
-
+Tuple format: (FOSSology_output, Ninka_output, SPDX_name)
 Example: ("GPL_v2", "GPLv2", "GPL-2.0")
+If any licenses are not covered by a scanner or SPDX, the "blank spot"(s) will
+be set to False.
 
-This file uses the old fossology dictionary (see link)
-http://www.fossology.org/attachments/3375/license_list_old.txt
+For those wishing to expand upon this dictionary, one important note: The SPDX
+term MUST be the last part of the tuple (the program is made to read it as
+such). If you intend to add an additional dictionary, put it between Ninka and
+SPDX.
 
-As was previously stated, this file uses the SPDX 1.19 license definitions
-and standards
-spdx.org/licenses/
+@author Doug Richardson
+@author Jon von Kampen
+@author James Thompson
 
-Ninka's dictionary can be found in the file rules.dict in Ninka 1.1
-https://github.com/dmgerman/ninka/blob/master/matcher/rules.dict
-(warning, it is somewhat difficult to read)
+@license Apache License 2.0
 
-Because of time constraints, this is not a comprehensive comparison dictionary
-between Fossology and Ninka.
+@todo Because of time constraints, this is not a comprehensive comparison
+dictionary between FOSSology and Ninka.
+"""
 
-For those wishing to expand upon this dictionary, one important note.
-The SPDX spec MUST be the last part of the tuple (the program is made to
-read it as such).  If you intend to add an additoinal dictionary, put it
-between ninka and the SPDX spec.
-'''
-
-#Kept separate for now for sorting purpose
 Non_Licenses = [
     ("ERROR", "ERROR", False), ("None", "NONE", False),
     ("UnclassifiedLicense", "UNKNOWN", False)
     ]
-
-'''
-    Fossology and Ninka are vague on some license output.  
-    Because these are not explicit matches, we cannot confirm 
-    their meaning.  However I put "approximations" and other 
-    recorded instances here for future development.
-'''
+"""Kept separate for now for sorting purposes"""
 
 License_Approximations = [
     ("BSD-style", "BSD3", False), ("BSD-style", "spdxBSD3", False), 
@@ -59,6 +48,12 @@ License_Approximations = [
     (False, "DoWhatTheFuckYouWantv2", "WTFPL"), 
     ("LGPL_v2.1+", "LesserGPLv2.1+", "LGPL-2.1+"),
     ]
+"""
+Fossology and Ninka are vague on some license output.  
+Because these are not explicit matches, we cannot confirm 
+their meaning.  However I put "approximations" and other 
+recorded instances here for future development.
+"""
 
 Licenses = [
     ("None", "NONE", "NONE"), #This is confirmation of no license
