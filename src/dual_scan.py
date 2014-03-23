@@ -1,5 +1,26 @@
 #!/usr/bin/python
 
+"""
+Scan a file or archive with FOSSology and Ninka, then output a JSON string with
+the file licenses, or the conflicting results from each scanner. Although
+multiple files within a package may be scanned, output is a single unified
+JSON. Output is intended for use in Software Package Data Exchange® (SPDX®)-
+compatible applications or documents.
+
+@author Doug Richardson
+@author Jon von Kampen
+@author James Thompson
+
+@license Apache License 2.0
+
+@todo May want to add a "percentage completed" (in factors of 10) for the
+archive scanner, as it can take a LONG time, and signs of progress would ease
+the user experience.
+@todo May want to add an initial check method to see if NOMOS and Ninka are
+where files.py says they are (even if it's just checking if a file exists in
+that location).
+"""
+
 import paths
 import sys
 import os
@@ -7,49 +28,24 @@ import subprocess
 import tarfile
 import zipfile
 import json
+import sys
+
 from run_scanners import ninka_scan, foss_scan
 from output_parser import ninka_parser, foss_parser, combined_parser
 
-'''
-    This file was written by Doug Richardson and Jon von Kampen, with the help
-    of James Thompson.
-
-    This file is licensed under the Apache License, verison 2.0
-
-    This file is the general script that runs the program proper
-    It takes a file or archive, unpacks it (if applicable), and then
-    subjects them to Fossology and Ninka scanners.  After which it creates
-    a unified output file.  This file can be read and extrapolated from for
-    whatever document is needed 
-
-    (for this initial build, we made a JSON for the
-    file-license portion of SPDX-1.2 for each file scanned).
-
-    Future development notes (for those who wish to expand upon this).
-    -May want to add a "percentage completed" (in factors of 10) for
-    the archive scanner, as it can take a LONG time, and signs of progress
-    would ease the user experience
-
-    -May want to add an initial check method to see if NOMOS and Ninka
-    are where files.py says they are (even if it's just checking if a file
-    exists in that location).
-'''
-
-'''
-    This trims down the absolute path so we can get the file name without
-    extraneous directories
-'''
 def get_file_from_absolute_path(path_name):
+    """
+    This trims down the absolute path so we can get the file name without
+    extraneous directories.
+    """
     path_list = path_name.split("/")
     return path_list[len(path_list) - 1]
 
-'''
-    This is a subprocess that scans each file in an archive
-    This function take advantage of the fact that tarfile and zipfile
-    python packages have identical method names.
-'''
-def archive_scan(archive, scantype, f_name):
-    #scan types can be n (ninka) or f (fossology)
+def archive_scan(archive, scan_type, f_name):
+    """
+    Scans each file in an archive. This function take advantage of the fact
+    that the tarfile and zipfile Python packages have identical method names.
+    """
     if not f_name:
         print("Error: Must specify an output file")
         archive.close()
@@ -58,39 +54,44 @@ def archive_scan(archive, scantype, f_name):
         f = open(f_name, 'w')
         for name in archive.getnames():
             path = paths.TEMP_ARCHIVE_UNPACK_PATH + "/" + name
-            if scantype is 'n':
+            #Scan types can be n (Ninka) or f (FOSSology)
+            if scan_type is 'n':
                 f.write(ninka_scan(path))
-            elif scantype is 'f':
+            elif scan_type is 'f':
                 f.write(foss_scan(path))
 
-#This gets rid of any internally used temporary directories if they remain
 def clean():
+    """
+    Removes any temporary directories used by the scans.
+    """
     if os.path.isdir(paths.TEMP_ARCHIVE_UNPACK_PATH):
         subprocess.call(["rm", "-r", paths.TEMP_ARCHIVE_UNPACK_PATH])
     if os.path.isdir(paths.SCANNER_OUTPUT_PATH):
         subprocess.call(["rm", "-r", paths.SCANNER_OUTPUT_PATH])
 
-'''
-    Currently, this deletes a file with an identical name and location
-    to one that this method will need to write to.
-'''
 def check_file(file_name):
-    #an option to decide whether or not to overwrite may be added later
+    """
+    Currently, this deletes a file with an identical name and location to one
+    that this method will need to write to.
+    
+    @todo An option to decide whether or not to overwrite (undecided)
+    """
     if os.path.isfile(file_name):
         subprocess.call(["rm", file_name])
 
-#This is the method that runs both scanners on a given file or package
 def run_scans(target):
-
+    """
+    Runs both FOSSology and Ninka on a given file or package.
+    """
     print("creating directories needed for the scanners to work")
 
-    '''
-        Checks to see if the paths we need are there
-        If they are not, it creates them
+    """
+    Checks to see if the paths we need are there
+    If they are not, it creates them
 
-        (the archive path is meant for destruction, so it is assumed
-        that it should not be there unless something went wrong)
-    '''
+    (the archive path is meant for destruction, so it is assumed
+    that it should not be there unless something went wrong)
+    """
 
     if not os.path.isdir(paths.SCANNER_OUTPUT_PATH):
         subprocess.call(["mkdir", paths.SCANNER_OUTPUT_PATH])
@@ -98,7 +99,6 @@ def run_scans(target):
         subprocess.call(["mkdir", paths.TEMP_ARCHIVE_UNPACK_PATH])
     else:
         subprocess.call(["rm", paths.TEMP_ARCHIVE_UNPACK_PATH + "/*.*"])
-
     
     #To ensure the absolute path is not a part of the output file name
     out_name = get_file_from_absolute_path(target)
@@ -156,21 +156,19 @@ def run_scans(target):
         f_file.write(foss_scan(path))
         print("fossology scan finished")
         f_file.close()
-
     
     #clean()
 
-    '''
-    NOTE: Due to python limitations, this software currently...
-    ...can NOT scan any other archive types.
-    '''
+    """
+    NOTE: Due to Python limitations, this software currently can NOT scan any
+    other archive types.
+    """
 
-
-'''
-    This method parses the output of the Fossology and Ninka scans
-    and places the result in a unified internal file.
-'''
 def parse_output(target, is_archive, foss_file, ninka_file):
+    """
+    Parses the FOSSology and Ninka scan output, and places the results in a
+    unified file (for our internal use).
+    """
     if not os.path.isfile(foss_file):
         print("ERROR: " + foss_file + " not found")
         exit(1)
@@ -179,7 +177,6 @@ def parse_output(target, is_archive, foss_file, ninka_file):
         print("ERROR: " + ninka_file + " not found")
         exit(1)
     else:
-
         out_name = get_file_from_absolute_path(target)
         print("Creating combined output file")
         combined_out = paths.SCANNER_OUTPUT_PATH + "/"
@@ -207,27 +204,26 @@ def parse_output(target, is_archive, foss_file, ninka_file):
                     output += foss_out[1] + ";"
                     output += ninka_out[1] + "\n"
                     output_file.write(output)
-                    
 
         foss.close()
         ninka.close()
         output_file.close()
         print("Output file complete")
 
-'''
-    This method parses the unified internal file that parse_output created
-    and places the results in a tuple that can be easily translated to a
-    JSON object for use with SPDX 1.2.
+def parse_combined_file(file_name):
+    """
+    Parses the unified internal file that parse_output() created and places the
+    results in a tuple that can be easily translated to a JSON object for use
+    with SPDX 1.2.
 
     The input format is archive_name;file_name;fossology_output;ninka_output
 
-    The output format is (archive_name, file_name, license_declared, comments)
-'''
-def parse_combined_file(file_name):
+    The output format is (archive_name, file_name, license_concluded, comments)
+    """
     f = open(file_name, 'r')
     archive_name = "(ERROR)"
     file_name = "(ERROR)"
-    license_declared = "(ERROR)"
+    license_concluded = "(ERROR)"
     comments = "(ERROR)"
     output = False
 
@@ -235,21 +231,21 @@ def parse_combined_file(file_name):
         file_info = line.split(";")
         archive_name = file_info[0] #The name of the archive scanned
         file_name = file_info[1] #The name of the file scanned
-        foss_out = file_info[2].split(",") #Fossology's output
+        foss_out = file_info[2].split(",") #FOSSology's output
         ninka_out = file_info[3].split(",") #Ninka's output
 
-        #If fossology and Ninka throw an error, skip this entry
+        #If FOSSology and Ninka throw an error, skip this entry
         if foss_out[0] != "ERROR" and ninka_out[0] != "ERROR":
             result = combined_parser(foss_out, ninka_out)
-            license_declared = result[0]
+            license_concluded = result[0]
             comments = result[1]
             if not output:
                 temp = (archive_name, file_name,
-                    license_declared, comments)
+                    license_concluded, comments)
                 output = [temp]
             else:
                 temp = (archive_name, file_name,
-                    license_declared, comments)
+                    license_concluded, comments)
                 output.append(temp)
     
     return output
@@ -275,6 +271,7 @@ def generate_json(scan_list):
     present, but it may be set if there is only one file that is part of a
     larger package.
     """
+    
     for scan in scan_list:
         package_name = scan[0]
         file_name = scan[1]
