@@ -1,14 +1,17 @@
-Fossology-Ninka
-===============
+Fossology-Ninka 1.0
+===================
 
 Overview
 --------
 
 The purpose of this project is to develop a tool to generate SPDX documents that combine the outputs of [FOSSology] (http://www.fossology.org/projects/fossology) and [Ninka] (http://ninka.turingmachine.org/). A software file or package will be passed to each scanner in sequence. The output will be commpared and combined into one SPDX document. The result will give end users the licensing information that they need to determine how the scanned software may be used. Combining the two outputs leverages the strengths of each scanning engine.
 
-Current Version
----------------
-Version 1.0
+This project may be integrated with other tools in the SPDX ecosystem. In particular, FOSSology-Ninka may be called as part of the do_spdx() SPDX document generation process being developed for [Yocto](https://www.yoctoproject.org/) builds.
+
+### Future Goals
+* Generation of complete SPDX documents, including manual conflict resolution between FOSSology and Ninka results
+* Integration with third-party SPDX databases and web viewers/editors
+* Attempt to optimize FOSSology execution time
 
 Copyright
 ---------
@@ -20,8 +23,13 @@ Code and documentation are jointly copyrighted by:
 Licenses
 --------
 **Source code:** [Apache-2.0] (https://github.com/TheFinks/Fossology-Ninka/edit/master/LICENSE.md)
-
 **Documentation:** Creative Commons [CC-BY-SA 3.0] (http://creativecommons.org/licenses/by-sa/3.0/us/legalcode)
+
+System Requirements
+-------------------
+In general, your system should meet [FOSSology's performance recommendations](http://www.fossology.org/projects/fossology/wiki/SysConfig), which depend on the maximum file or package size you intend to scan.
+
+FOSSology-Ninka is developed and tested on Ubuntu 12.04 LTR with the latest version of Python 2.
 
 Installation
 ------------
@@ -40,6 +48,14 @@ After that the process is entirely automated.  The results will be printed out a
 
 **Warning:** The scanning portion of the process can take a long time.
 
+Intended Audiences
+------------------
+* [FOSSology] (http://www.fossology.org/projects/fossology) developers and users
+* [Ninka] (http://ninka.turingmachine.org/) developers and users
+* [Software Package Data Exchange (SPDX)] (http://spdx.org/) document authors
+* [Yocto] (https://www.yoctoproject.org/) builders
+* Additional SPDX ecosystem tools developed by fellow students in CSCI 4900/Internet Systems Development (spring 2014) at the [University of Nebraska at Omaha](http://www.unomaha.edu)
+
 Contributions, Bug Tracking, and Code Management
 ------------------------------------------------
 We welcome all pull requests! Some requests may be declined with the option to resubmit with certain specified changes. You are also invited to open up an issue to report a bug, request a new feature, or offer advice.
@@ -48,28 +64,9 @@ All technical decisions (including whether to accept a pull request) will be mad
 
 Following the spring 2014 semester, project administration will be wholly transferred to [Matt Germonprez](http://myweb.unomaha.edu/~mgermonprez/vita.html) and the [University of Nebraska at Omaha](http://www.unomaha.edu) ("transferees"). The founding contributors’ code and other artifacts will be licensed to the transferees for unlimited reuse, modification, and relicensing. The transferees will receive all core contributor decision-making powers.
 
-Intended Audiences
-------------------
-* [FOSSology] (http://www.fossology.org/projects/fossology) developers and users
-* [Ninka] (http://ninka.turingmachine.org/) developers and users
-* [Software Package Data Exchange (SPDX)] (http://spdx.org/) document authors
-* Additional SPDX ecosystem tools developed by fellow students in CSCI 4900/Internet Systems Development (spring 2014) at the [University of Nebraska at Omaha](http://www.unomaha.edu)
-
-Technical Specifications
-------------------------
-
 System Design
 -------------
-The system design is represented by our [DFD Diagram] (https://github.com/TheFinks/Fossology-Ninka/edi/master/README.md).
-
-
-Communication 
--------------
-
-
-
-
-To speed the determination of software artifact licenses by comparing the output of multiple automatic license scanners -- at this time, [FOSSology](http://www.fossology.org/projects/fossology) and [Ninka](http://ninka.turingmachine.org/).
+Please refer to our [design folder](https://github.com/TheFinks/Fossology-Ninka/tree/master/design) for UI and code mockups. Our architecture is described by our [data flow diagram] (https://github.com/TheFinks/Fossology-Ninka/blob/master/design/DFD.jpg).
 
 Core Contributors
 -----------------
