@@ -1,32 +1,36 @@
 #!/usr/bin/python
 
-'''
-    This software was developed by Doug Richardson, with the help of
-    Jon von Kampen and James Thompson.  This software is licensed under
-    the Apache 2.0 license.
+"""
+File path constants for internal use. These paths may need to be edited to
+conform to the installation directories on your system. Not all are currently
+in use; "extras" are anticipated to support upcoming features.
 
-    These are global path variables stored in one place for easy configuration
-    Not all of these are currently used, but are left in there for future
-    versions
-'''
+@author Doug Richardson
+@author Jon von Kampen
+@author James Thompson
 
-'''
-    these are the paths to the files
-    these were made on the system developed on, and may need to be changed...
-    ...for your system
-'''
+@license Apache License 2.0
+"""
+
 NINKA_PATH = "/usr/share/ninka/ninka-1.1/"
 FOSSOLOGY_AGENT_PATH = "/usr/lib/fossology/agents/"
 
-#This is the route to the fossology web application for using wget
 FOSSOLOGY_WEB_HOST = "127.0.1.1/repo/"
-'''
-    Here are the names of the files utilized
-    nomos, copyright, ununpack, pkgagent, and mimetype are fossology agents
-    
-    currently, copyright, ununpack, pkgagent and mimetype are not used.
-    However, they were included anyway incase future development warrants them.
-'''
+"""URL of the FOSSology web application, for calling it via wget."""
+
+"""
+The following FOSSology components can be accessed:
+ - nomos: The license scanner
+ - copyright: Scans for its nakesake
+ - ununpack: Unpacks an ISO, tar, or other archive into component files
+ - pkgagent: Scans package headers in RPMs and Debian packages listed on the
+   command line
+ - mimetype: Returns file types for files listed on the command line
+ 
+Currently, only nomos is used. The others are included in case they are desired
+for future development.
+"""
+
 NINKA = "ninka.pl"
 NOMOS = "nomos"
 COPYRIGHT_SCANNER = "copyright"
@@ -34,19 +38,20 @@ UNUNPACK = "ununpack"
 PKGAGENT = "pkgagent"
 MINETYPE_SCANNER = "mimetype"
 
-#Here are some options for command-line usage of fossology (the wget way)
+#Some options for command-line usage of FOSSology (the wget way)
 WEB_NOMOS_SCAN = "?mod=agent_nomos_once"
 WEB_COPYRIGHT_SCAN = "?mod=agent_copyright_once"
 
-'''
-    Currently, FINAL_OUTPUT_PATH is not used, but may be used in future
-    versions.
-
-    The directories created by TEMP_ARCHIVE_UNPACK_PATH and SCANNER_OUTPUT_PATH
-    and all the files within them are destroyed once the process is finished.
-'''
-
-TEMP_ARCHIVE_UNPACK_PATH = "temp_archive" #where files are unpacked and scanend
-SCANNER_OUTPUT_PATH = "scanner_output" #where the combined scanner output goes
-FINAL_OUTPUT_PATH = "dual_scan_output" #where the final file will go
-
+"""
+The directories created by TEMP_ARCHIVE_UNPACK_PATH and SCANNER_OUTPUT_PATH
+and all the files within them are destroyed once the process is finished.
+"""
+TEMP_ARCHIVE_UNPACK_PATH = "temp_archive"
+"""Where files are unpacked and scanned."""
+SCANNER_OUTPUT_PATH = "scanner_output"
+"""Where the combined scanner output goes."""
+FINAL_OUTPUT_PATH = "dual_scan_output"
+"""
+Where the final file will go. Currently not used but is anticipated for future
+use.
+"""
