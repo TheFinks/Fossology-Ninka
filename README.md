@@ -73,6 +73,8 @@ Please refer to our [design folder](https://github.com/TheFinks/Fossology-Ninka/
 * [User interface mockups](https://github.com/TheFinks/Fossology-Ninka/tree/master/design/ui_mockups)
 * [Code mockups](https://github.com/TheFinks/Fossology-Ninka/tree/master/design/code_mockups)
 
+Some older project documentation is located in [README_old](https://github.com/TheFinks/Fossology-Ninka/tree/master/README_old) until it's updated and probably converted to Markdown.
+
 Core Contributors
 -----------------
 * Doug Richardson
