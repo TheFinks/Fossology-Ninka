@@ -68,10 +68,10 @@ Following the spring 2014 semester, project administration will be wholly transf
 System Design
 -------------
 Please refer to our [design folder](https://github.com/TheFinks/Fossology-Ninka/tree/master/design):
-*[Architecture/data flow diagram](https://github.com/TheFinks/Fossology-Ninka/blob/master/design/DFD.jpg)
-*[Use cases](https://github.com/TheFinks/Fossology-Ninka/blob/master/design/Use%20Cases.docx)
-*[User interface mockups](https://github.com/TheFinks/Fossology-Ninka/tree/master/design/ui_mockups)
-*[Code mockups](https://github.com/TheFinks/Fossology-Ninka/tree/master/design/code_mockups)
+* [Architecture/data flow diagram](https://github.com/TheFinks/Fossology-Ninka/blob/master/design/DFD.jpg)
+* [Use cases](https://github.com/TheFinks/Fossology-Ninka/blob/master/design/Use%20Cases.docx)
+* [User interface mockups](https://github.com/TheFinks/Fossology-Ninka/tree/master/design/ui_mockups)
+* [Code mockups](https://github.com/TheFinks/Fossology-Ninka/tree/master/design/code_mockups)
 
 Core Contributors
 -----------------
