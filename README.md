@@ -6,24 +6,54 @@ Overview
 
 The purpose of this project is to develop a tool to generate SPDX documents that combine the outputs of [FOSSology] (http://www.fossology.org/projects/fossology) and [Ninka] (http://ninka.turingmachine.org/). A software file or package will be passed to each scanner in sequence. The output will be commpared and combined into one SPDX document. The result will give end users the licensing information that they need to determine how the scanned software may be used. Combining the two outputs leverages the strengths of each scanning engine.
 
-FOSSology and Ninka are both scanning tools used to find licenses associated with a given software file or package. Each tool's algorithms can recognize particular licenses better than the other. The tool that we are creating intends to combine the output of both of these scanning tools into one cohesive document.  Refer to the documentation of FOSSology and Ninka for more information.
-
-This project may be integrated with the projects of other CSCI 4900 groups. In particular, FOSSology-Ninka output may be stored in an SPDX database to be accessed by the SPDX Dashboard application. An enhancement to SPDX Dashboard may allow its use as an interface to manually resolve license declaration conflicts detected by FOSSology-Ninka.
-
-In addition, we will develop a basic interface and spdx-finalizing procedure to enable end users to manually use our software as a stand-alone program.  These will consist of a simple uploader and SPDX finalizer.  The core scanner will be able to work independently of these sub-systems to allow for automation or future customization.
-If we have completed the main tasks above, we will attempt to optimize FOSSology’s execution time to likewise increase the speed of our program. Also, if time permits, we will attempt to design a web based user interface.
-
 Current Version
 ---------------
 Version 1.0
 
-License
--------
-The source code will be covered under the [Apache 2.0] (https://github.com/TheFinks/Fossology-Ninka/edit/master/LICENSE.md)license declaration.
-All documentation is licensed under Creative Commons CC-BY-SA
-
 Copyright
 ---------
+Code and documentation are jointly copyrighted by:
+* Doug Richardson
+* [James Thompson] (https://github.com/jthomp24)
+* [Jon von Kampen] (https://github.com/jvonkampen0)
+
+Licenses
+--------
+**Source code:** [Apache-2.0] (https://github.com/TheFinks/Fossology-Ninka/edit/master/LICENSE.md)
+
+**Documentation:** Creative Commons [CC-BY-SA 3.0] (http://creativecommons.org/licenses/by-sa/3.0/us/legalcode)
+
+Installation
+------------
+1. Install and configure FOSSology and Ninka as needed. Please refer to their respective documentation for instructions on how to do so.
+2. Download the files from the src folder. All of these files MUST be in the same folder to work. Apart from that there are no restrictions on where to place the software save for what your system has imposed.
+3. Open paths.py with whatever editor you prefer. Change FOSSOLOGY_AGENT_PATH to the location of Nomos (the FOSSology license scanning agent). If you do not know, go to the command prompt and type `find / -name nomos`. Depending on your system, you may need root privileges (or `sudo`) to do so. If multiple FOSSology instances come up, choose whichever one you want. Do NOT include the name "nomos" in your path (that's handled by a separate variable). For example, if you choose to use `/usr/lib/fossology/agents/nomos`, you would enter `/usr/lib/fossology/agents/`. Do the same thing with the directory for "ninka.pl" for the variable NINKA_PATH.
+4. If all our files are present and the Nomos and Ninka paths are correct, then you are ready to use the software.  Happy scanning.
+
+Usage
+-----
+`./dual_scan.py file_or_archive`
+
+**Example:** `./dual_scan.py archive.tar.bz2`
+
+After that the process is entirely automated.  The results will be printed out as a JSON string.
+
+**Warning:** The scanning portion of the process can take a long time.
+
+Contributions, Bug Tracking, and Code Management
+------------------------------------------------
+We welcome all pull requests! Some requests may be declined with the option to resubmit with certain specified changes. You are also invited to open up an issue to report a bug, request a new feature, or offer advice.
+
+All technical decisions (including whether to accept a pull request) will be made by the unanimous consent of the named core contributors (see below). Additional core contributors will be designated by unanimous consensus of the existing core contributors. Core contributors may also abstain from voting on any decision. This decision mechanism may be revised in the future if it becomes unwieldy.
+
+Following the spring 2014 semester, project administration will be wholly transferred to [Matt Germonprez](http://myweb.unomaha.edu/~mgermonprez/vita.html) and the [University of Nebraska at Omaha](http://www.unomaha.edu) ("transferees"). The founding contributors’ code and other artifacts will be licensed to the transferees for unlimited reuse, modification, and relicensing. The transferees will receive all core contributor decision-making powers.
+
+Intended Audiences
+------------------
+* [FOSSology] (http://www.fossology.org/projects/fossology) developers and users
+* [Ninka] (http://ninka.turingmachine.org/) developers and users
+* [Software Package Data Exchange (SPDX)] (http://spdx.org/) document authors
+* Additional SPDX ecosystem tools developed by fellow students in CSCI 4900/Internet Systems Development (spring 2014) at the [University of Nebraska at Omaha](http://www.unomaha.edu)
 
 Technical Specifications
 ------------------------
@@ -32,27 +62,19 @@ System Design
 -------------
 The system design is represented by our [DFD Diagram] (https://github.com/TheFinks/Fossology-Ninka/edi/master/README.md).
 
-Installation
-------------
 
-Usage
------
-
-Communities of Interest
------------------------
 Communication 
 -------------
-Code Management
----------------
+
 
 
 
 To speed the determination of software artifact licenses by comparing the output of multiple automatic license scanners -- at this time, [FOSSology](http://www.fossology.org/projects/fossology) and [Ninka](http://ninka.turingmachine.org/).
 
-Contributors
-------------
+Core Contributors
+-----------------
 * Doug Richardson
-* James Thompson
-* Jon von Kampen
+* [James Thompson] (https://github.com/jthomp24)
+* [Jon von Kampen] (https://github.com/jvonkampen0)
 
 overseen by [Matt Germonprez](http://myweb.unomaha.edu/~mgermonprez/vita.html) for CSCI 4900/Internet Systems Development (spring 2014) at the [University of Nebraska at Omaha](http://www.unomaha.edu).
