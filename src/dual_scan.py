@@ -56,9 +56,9 @@ def archive_scan(archive, scan_type, f_name):
             path = paths.TEMP_ARCHIVE_UNPACK_PATH + "/" + name
             #Scan types can be n (Ninka) or f (FOSSology)
             if scan_type is 'n':
-                f.write(ninka_scan(path))
+                f.write(str(ninka_scan(path)))
             elif scan_type is 'f':
-                f.write(foss_scan(path))
+                f.write(str(foss_scan(path)))
 
 def clean():
     """
@@ -145,7 +145,7 @@ def run_scans(target):
         path = paths.TEMP_ARCHIVE_UNPACK_PATH + "/" + target
         subprocess.call(["cp", target, paths.TEMP_ARCHIVE_UNPACK_PATH])
         #first with Ninka
-        n_file = open(ninka_out, 'w')
+        n_file = open(ninka_out, 'wb')
         print("Starting Ninka scan")
         n_file.write(ninka_scan(path))
         print("Ninka scan fnished")
