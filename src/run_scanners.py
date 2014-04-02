@@ -59,7 +59,7 @@ def foss_scan(target):
     """
     try:
         f = subprocess.check_output([nomos, target])
-    except Exception, e:
+    except Exception as e:
         f = str(e.output)
     
     return f
