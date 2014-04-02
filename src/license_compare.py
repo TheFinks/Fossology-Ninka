@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 """
 Canonicalizes the licenses found in FOSSology and Ninka, which use different

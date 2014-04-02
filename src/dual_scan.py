@@ -1,11 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 """
 Scan a file or archive with FOSSology and Ninka, then output a JSON string with
 the file licenses, or the conflicting results from each scanner. Although
 multiple files within a package may be scanned, output is a single unified
-JSON. Output is intended for use in Software Package Data Exchange® (SPDX®)-
-compatible applications or documents.
+JSON. Output is intended for use in Software Package Data Exchange(R) 
+SPDX(R))-compatible applications or documents.
 
 @author Doug Richardson
 @author Jon von Kampen
