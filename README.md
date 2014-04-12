@@ -41,7 +41,7 @@ Installation
 
 Usage
 -----
-`./dual_scan.py file_or_archive`options
+`./dual_scan.py file_or_archive options`
 
 **Example:** `./dual_scan.py archive.tar.bz2 -v`
 
