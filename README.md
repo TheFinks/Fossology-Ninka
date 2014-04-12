@@ -41,11 +41,14 @@ Installation
 
 Usage
 -----
-`./dual_scan.py file_or_archive`
+`./dual_scan.py file_or_archive`options
 
-**Example:** `./dual_scan.py archive.tar.bz2`
+**Example:** `./dual_scan.py archive.tar.bz2 -v`
 
 After that the process is entirely automated.  The results will be printed out as a JSON string.
+
+**Options:**
+-v activates the verbose mode.  This prints out messages indicating the progress of the process.
 
 **Warning:** The scanning portion of the process can take a long time.
 
