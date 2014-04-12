@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 
 """
 Parses the output of FOSSology and Ninka scans. This file is for internal use

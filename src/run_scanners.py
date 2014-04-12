@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 
 """
 Run FOSSology and Ninka and return their results. This file is for internal use
