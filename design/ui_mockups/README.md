@@ -4,7 +4,7 @@ This folder contains mockups that demonstrate how to use FOSSology-Ninka on the 
 
 command_line
 ------------
-These mockups are basically a slideshow set of pictures. See the [walkthrough document](https://github.com/TheFinks/Fossology-Ninka/blob/master/ui_mockups/command_line/Mockup%20Walkthrough.docx) for explanation of each slide.
+These mockups are basically a slideshow set of pictures. See the [walkthrough document](https://github.com/TheFinks/Fossology-Ninka/blob/master/design/ui_mockups/command_line/Mockup%20Walkthrough.docx) for explanation of each slide.
 
 web
 ---
