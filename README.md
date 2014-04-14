@@ -35,9 +35,10 @@ The FOSSology-Ninka dual scanner is developed and tested on Ubuntu 12.04 LTR wit
 Installation
 ------------
 1. Install and configure [FOSSology] (http://www.fossology.org/projects/fossology/wiki/Ubuntu_Install_2_5) and [Ninka] (http://ninka.turingmachine.org/#sec-3) and their prerequisites as needed. Please refer to their respective documentation for instructions on how to do so.
-2. Download the files from the src folder. All of these files MUST be in the same folder to work. Apart from that there are no restrictions on where to place the software save for what your system has imposed.
-3. Open paths.py with whatever editor you prefer. Change FOSSOLOGY_AGENT_PATH to the location of Nomos (the FOSSology license scanning agent). If you do not know, go to the command prompt and type `find / -name nomos`. Depending on your system, you may need root privileges (or `sudo`) to do so. If multiple FOSSology instances come up, choose whichever one you want. Do NOT include the name "nomos" in your path (that's handled by a separate variable). For example, if you choose to use `/usr/lib/fossology/agents/nomos`, you would enter `/usr/lib/fossology/agents/`. Do the same thing with the directory for "ninka.pl" for the variable NINKA_PATH.
-4. If all our files are present and the Nomos and Ninka paths are correct, then you are ready to use the software.  Happy scanning.
+2. Install Python 2, e.g., by executing `sudo apt-get install python2.7` on a Debian-like Linux distribution.
+3. Download the files from the src folder. All of these files MUST be in the same folder to work. Apart from that there are no restrictions on where to place the software save for what your system has imposed.
+4. Open paths.py with whatever editor you prefer. Change FOSSOLOGY_AGENT_PATH to the location of Nomos (the FOSSology license scanning agent). If you do not know, go to the command prompt and type `find / -name nomos`. Depending on your system, you may need root privileges (or `sudo`) to do so. If multiple FOSSology instances come up, choose whichever one you want. Do NOT include the name "nomos" in your path (that's handled by a separate variable). For example, if you choose to use `/usr/lib/fossology/agents/nomos`, you would enter `/usr/lib/fossology/agents/`. Do the same thing with the directory for "ninka.pl" for the variable NINKA_PATH.
+5. If all our files are present and the Nomos and Ninka paths are correct, then you are ready to use the software.  Happy scanning.
 
 Usage
 -----
