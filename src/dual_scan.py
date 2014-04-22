@@ -41,18 +41,27 @@ def get_file_from_absolute_path(path_name):
     path_list = path_name.split("/")
     return path_list[len(path_list) - 1]
 
-def archive_scan(archive, scan_type, f_name):
+def archive_scan(archive, scan_type, f_name, arc_type):
     """
     Scans each file in an archive. This function take advantage of the fact
     that the tarfile and zipfile Python packages have identical method names.
     """
+
+    arc_scan = False
     if not f_name:
         sys.stderr.write("ERROR: Must specify an output file")
         archive.close()
         exit(1)
     else:
         f = open(f_name, 'w')
-        for name in archive.getnames():
+
+        if arc_type:
+            if arc_type == "t":
+                arc_scan = archive.getnames()
+            elif arc_type == "z":
+                arc_scan = archive.namelist()
+
+        for name in arc_scan:
             path = paths.TEMP_ARCHIVE_UNPACK_PATH + "/" + name
             #Scan types can be n (Ninka) or f (FOSSology)
             if scan_type is 'n':
@@ -130,11 +139,11 @@ def run_scans(target, opts):
         archive.extractall(paths.TEMP_ARCHIVE_UNPACK_PATH)
         if verbose:
             print("Starting Ninka scan")
-        archive_scan(archive, 'n', ninka_out)
+        archive_scan(archive, 'n', ninka_out, "t")
         if verbose:
             print("Ninka scan finished")
             print("Starting FOSSology scan")
-        archive_scan(archive, 'f', foss_out)
+        archive_scan(archive, 'f', foss_out, "t")
         if verbose:
             print("FOSSology scan finished")
         archive.close()
@@ -143,17 +152,18 @@ def run_scans(target, opts):
     elif zipfile.is_zipfile(target):
         if verbose:
             print(target + " identified as ZIP file")
-        archive = zipfile.open(target)
+        #archive = zipfile.open(target)
+        archive = zipfile.ZipFile(target, "r")
         if verbose:
             print("Extracting data")
         archive.extractall(paths.TEMP_ARCHIVE_UNPACK_PATH)
         if verbose:
             print("Starting Ninka scan")
-        archive.scan(archive,'n', ninka_out)
+        archive_scan(archive,'n', ninka_out, "z")
         if verbose:
             print("Ninka scan finished")
             print("Starting FOSSology scan")
-        archive.scan(archive,'f', foss_out)
+        archive_scan(archive,'f', foss_out, "z")
         if verbose:
             print("FOSSology scan finished")
         archive.close()
@@ -347,7 +357,7 @@ else:
     #subprocess.call(["rm", N_out])
     #print(str(parse_combined_file(combined_out)))
     scan_list = parse_combined_file(combined_out)
-    #clean() #get rid of the internal files since we no longer need them
+    clean() #get rid of the internal files since we no longer need them
     if not scan_list:
         raise Exception(
             "Failed to parse FOSSology and Ninka scanner output.")
