@@ -162,7 +162,7 @@ def run_scans(target, opts):
         if verbose:
             print("File is either not an archive or an unrecognized format;"
                 " scanning as single file")
-        path = paths.TEMP_ARCHIVE_UNPACK_PATH + "/" + target
+        path = paths.TEMP_ARCHIVE_UNPACK_PATH + "/" + out_name
         subprocess.call(["cp", target, paths.TEMP_ARCHIVE_UNPACK_PATH])
         #first with Ninka
         n_file = open(ninka_out, 'wb')
@@ -347,7 +347,7 @@ else:
     #subprocess.call(["rm", N_out])
     #print(str(parse_combined_file(combined_out)))
     scan_list = parse_combined_file(combined_out)
-    clean() #get rid of the internal files since we no longer need them
+    #clean() #get rid of the internal files since we no longer need them
     if not scan_list:
         raise Exception(
             "Failed to parse FOSSology and Ninka scanner output.")
