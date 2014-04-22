@@ -11,6 +11,6 @@ New Features
   
 Documentation
 -------------
-  - Created [README.MD] (https://github.com/TheFinks/Fossology-Ninka/README.md)
-  - Created [LICENCE.MD] (https://github.com/TheFinks/Fossology-Ninka/LICENSE.md)
-  - Creaded [CHANGELOG.MD] (https://github.com/TheFinks/Fossology-Ninka/CHANGELOG.md)
+  - Created [README.MD] (https://github.com/TheFinks/Fossology-Ninka/blob/master/README.md)
+  - Created [LICENCE.MD] (https://github.com/TheFinks/Fossology-Ninka/blob/master/LICENSE.md)
+  - Creaded [CHANGELOG.MD] (https://github.com/TheFinks/Fossology-Ninka/blob/master/CHANGELOG.md)
