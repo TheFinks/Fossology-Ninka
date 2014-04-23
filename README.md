@@ -20,11 +20,7 @@ Code and documentation are jointly copyrighted by:
 * [James Thompson] (https://github.com/jthomp24)
 * [Jon von Kampen] (https://github.com/jvonkampen0)
 
-Licenses
---------
-**Source code:** [Apache-2.0] (https://github.com/TheFinks/Fossology-Ninka/edit/master/LICENSE.md)
-
-**Documentation:** Creative Commons [CC-BY-SA 3.0] (http://creativecommons.org/licenses/by-sa/3.0/us/legalcode)
+See also our code and documentation [licenses](https://github.com/TheFinks/Fossology-Ninka/edit/master/LICENSE.md).
 
 System Requirements
 -------------------
