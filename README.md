@@ -16,7 +16,7 @@ This project may be integrated with other tools in the SPDX ecosystem. In partic
 Copyright
 ---------
 Code and documentation are jointly copyrighted by:
-* Doug Richardson
+* [Doug Richardson] (https://github.com/Doug-CaptainAwesome-Richardson)
 * [James Thompson] (https://github.com/jthomp24)
 * [Jon von Kampen] (https://github.com/jvonkampen0)
 
@@ -77,7 +77,7 @@ Some older project documentation is located in [README_old](https://github.com/T
 
 Core Contributors
 -----------------
-* Doug Richardson
+* [Doug Richardson] (https://github.com/Doug-CaptainAwesome-Richardson)
 * [James Thompson] (https://github.com/jthomp24)
 * [Jon von Kampen] (https://github.com/jvonkampen0)
 
