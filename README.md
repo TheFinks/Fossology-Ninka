@@ -6,12 +6,14 @@ Overview
 
 The purpose of this project is to develop a tool to generate SPDX documents that combine the outputs of [FOSSology] (http://www.fossology.org/projects/fossology) and [Ninka] (http://ninka.turingmachine.org/). A software file or package will be passed to each scanner in sequence. The output will be commpared and combined into one SPDX document. The result will give end users the licensing information that they need to determine how the scanned software may be used. Combining the two outputs leverages the strengths of each scanning engine.
 
-This project may be integrated with other tools in the SPDX ecosystem. In particular, FOSSology-Ninka may be called as part of the do_spdx() SPDX document generation process being developed for [Yocto](https://www.yoctoproject.org/) builds.
+This project may be integrated with other tools in the SPDX ecosystem. In particular, FOSSology-Ninka may be called as part of the [do_spdx()](https://github.com/chaughawout/Do_SPDX/) SPDX document generation process.
 
 ### Future Goals
-* Generation of complete SPDX documents, including manual conflict resolution between FOSSology and Ninka results
 * Integration with third-party SPDX databases and web viewers/editors
+* Generation of complete SPDX documents, including manual conflict resolution between FOSSology and Ninka results
+* [Parallel scanning](https://github.com/TheFinks/Fossology-Ninka/issues/9)
 * Attempt to optimize FOSSology execution time
+* Web front-end
 
 Copyright
 ---------
