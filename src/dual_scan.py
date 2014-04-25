@@ -32,6 +32,8 @@ import sys
 import paths
 from run_scanners import ninka_scan, foss_scan
 from output_parser import ninka_parser, foss_parser, combined_parser
+from checksum import _hash_file
+from do_spdx_plugin import make_json
 
 def get_file_from_absolute_path(path_name):
     """
@@ -45,6 +47,8 @@ def archive_scan(archive, scan_type, f_name, arc_type):
     """
     Scans each file in an archive. This function take advantage of the fact
     that the tarfile and zipfile Python packages have identical method names.
+    
+    04/25/2014: Added a SHA-1 checksum generating "scanner" to this method
     """
 
     arc_scan = False
@@ -68,6 +72,15 @@ def archive_scan(archive, scan_type, f_name, arc_type):
                 f.write(str(ninka_scan(path)))
             elif scan_type is 'f':
                 f.write(str(foss_scan(path)))
+            elif scan_type is 'c': #checksum now included
+                #make sure it's not a directory
+                #(dirs cause the SHA-1 reader to die)
+                if not os.path.isdir(path):
+                    checksumstr = str(name) + ";" + str(_hash_file(path))
+                    checksumstr += "\n"
+                else:
+                    checksumstr = str(name) + ";" + "ERROR" + "\n"
+                f.write(checksumstr)
 
 def clean():
     """
@@ -116,6 +129,7 @@ def run_scans(target, opts):
         subprocess.call(["mkdir", paths.TEMP_ARCHIVE_UNPACK_PATH])
     else:
         subprocess.call(["rm", paths.TEMP_ARCHIVE_UNPACK_PATH + "/*.*"])
+        #TODO: Find a way to get the rm dir/*.* function to work...
     
     #To ensure the absolute path is not a part of the output file name
     out_name = get_file_from_absolute_path(target)
@@ -126,6 +140,8 @@ def run_scans(target, opts):
     foss_out = paths.SCANNER_OUTPUT_PATH + "/"
     foss_out += out_name + ".F_out.txt"
     check_file(foss_out)
+    checksum_out = paths.SCANNER_OUTPUT_PATH + "/"
+    checksum_out += out_name + ".SHA-1.txt"
 
     if verbose:
         print("Checking file format")
@@ -138,6 +154,10 @@ def run_scans(target, opts):
             print("Extracting data")
         archive.extractall(paths.TEMP_ARCHIVE_UNPACK_PATH)
         if verbose:
+            print("Generating SHA-1 checksum(s)")
+        archive_scan(archive, 'c', checksum_out, "t")
+        if verbose:
+            print("Checksum(s) generated")
             print("Starting Ninka scan")
         archive_scan(archive, 'n', ninka_out, "t")
         if verbose:
@@ -158,6 +178,10 @@ def run_scans(target, opts):
             print("Extracting data")
         archive.extractall(paths.TEMP_ARCHIVE_UNPACK_PATH)
         if verbose:
+            print("Generating SHA-1 checksum(s)")
+        archive_scan(archive, 'c', checksum_out, "z")
+        if verbose:
+            print("Checksum(s) generated")
             print("Starting Ninka scan")
         archive_scan(archive,'n', ninka_out, "z")
         if verbose:
@@ -174,7 +198,18 @@ def run_scans(target, opts):
                 " scanning as single file")
         path = paths.TEMP_ARCHIVE_UNPACK_PATH + "/" + out_name
         subprocess.call(["cp", target, paths.TEMP_ARCHIVE_UNPACK_PATH])
-        #first with Ninka
+
+        #first we find the SHA-1 checksum
+        c_file = open(checksum_out, 'wb')
+        if verbose:
+            print("Generating SHA-1 checksum(s)")
+        checksumstr = str(out_name) + ";" + str(_hash_file(path))
+        c_file.write(checksumstr)
+        if verbose:
+            print("Checksum(s) Generated")
+        c_file.close()
+
+        #next with Ninka
         n_file = open(ninka_out, 'wb')
         if verbose:
             print("Starting Ninka scan")
@@ -197,7 +232,7 @@ def run_scans(target, opts):
     other archive types.
     """
 
-def parse_output(target, is_archive, foss_file, ninka_file, opts):
+def parse_output(target, is_archive, foss_file, ninka_file, checksums, opts):
     """
     Parses the FOSSology and Ninka scan output, and places the results in a
     unified file (for our internal use).
@@ -217,6 +252,9 @@ def parse_output(target, is_archive, foss_file, ninka_file, opts):
     elif not os.path.isfile(ninka_file):
         sys.stderr.write("ERROR: " + ninka_file + " not found")
         exit(1)
+    elif not os.path.isfile(checksums):
+        sys.stderr.write("ERROR " + checksums + " not found")
+        exit(1)
     else:
         out_name = get_file_from_absolute_path(target)
         if verbose:
@@ -232,9 +270,11 @@ def parse_output(target, is_archive, foss_file, ninka_file, opts):
 
         foss = open(foss_file, 'r')
         ninka = open(ninka_file, 'r')
+        sha1 = open(checksums, 'r')
         output_file = open(combined_out, 'w')
         foss_lines = str(foss.read()).split("\n")
         ninka_lines = str(ninka.read()).split("\n")
+        checksum_lines = str(sha1.read()).split("\n")
         #If not equal, go with the shortest one, will put in later
         if len(foss_lines) == len(ninka_lines):
             for i in range(0, len(foss_lines) - 1):
@@ -242,7 +282,7 @@ def parse_output(target, is_archive, foss_file, ninka_file, opts):
                 ninka_out = ninka_parser(ninka_lines[i])
                 if foss_out[0].strip() == ninka_out[0].strip():
                     output = archive_name + ";"
-                    output += foss_out[0].strip() + ";"
+                    output += checksum_lines[i].strip() + ";"
                     output += foss_out[1] + ";"
                     output += ninka_out[1] + "\n"
                     output_file.write(output)
@@ -250,6 +290,7 @@ def parse_output(target, is_archive, foss_file, ninka_file, opts):
         foss.close()
         ninka.close()
         output_file.close()
+        sha1.close()
         if verbose:
             print("Output file complete")
 
@@ -274,8 +315,9 @@ def parse_combined_file(file_name):
         file_info = line.split(";")
         archive_name = file_info[0] #The name of the archive scanned
         file_name = file_info[1] #The name of the file scanned
-        foss_out = file_info[2].split(",") #FOSSology's output
-        ninka_out = file_info[3].split(",") #Ninka's output
+        sha1 = file_info[2] #The SHA-1 checksum
+        foss_out = file_info[3].split(",") #FOSSology's output
+        ninka_out = file_info[4].split(",") #Ninka's output
 
         #If FOSSology and Ninka throw an error, skip this entry
         if foss_out[0] != "ERROR" and ninka_out[0] != "ERROR":
@@ -283,11 +325,11 @@ def parse_combined_file(file_name):
             license_concluded = result[0]
             comments = result[1]
             if not output:
-                temp = (archive_name, file_name,
+                temp = (archive_name, file_name, sha1,
                     license_concluded, comments)
                 output = [temp]
             else:
-                temp = (archive_name, file_name,
+                temp = (archive_name, file_name, sha1,
                     license_concluded, comments)
                 output.append(temp)
     
@@ -297,8 +339,8 @@ def generate_json(scan_list):
     """
     Generates a JSON string from a list of dual-scan results.
     
-    Results are 4-tuples of the format:
-        (package_name, file_name, license_concluded, comments)
+    Results are 5-tuples of the format:
+        (package_name, checksum, file_name, license_concluded, comments)
     
     The JSON string is intended to be integrated into an overall SPDX document,
     as reflected by the key names. This function handles both single file and
@@ -318,12 +360,14 @@ def generate_json(scan_list):
     for scan in scan_list:
         package_name = scan[0]
         file_name = scan[1]
-        concluded = scan[2]
-        comments = scan[3]
+        checksum = scan[2]
+        concluded = scan[3]
+        comments = scan[4]
     
         if scan[0] != "NONE":
             results["package_name"] = package_name
         results["file_results"][file_name] = {
+            "checksum": checksum,
             "licenseConcluded": concluded,
             "licenseComments": comments
         }
@@ -339,6 +383,8 @@ else:
     if len(sys.argv) == 3:
         opts = sys.argv[2]
 
+    clean() #incase the temporary directories are still around
+
     run_scans(sys.argv[1], opts)
     out_name = get_file_from_absolute_path(str(sys.argv[1]))
 
@@ -347,19 +393,19 @@ else:
     N_out += out_name + ".N_out.txt"
     F_out = paths.SCANNER_OUTPUT_PATH + "/"
     F_out += out_name + ".F_out.txt"
+    checksum_out = paths.SCANNER_OUTPUT_PATH + "/"
+    checksum_out += out_name + ".SHA-1.txt"
     combined_out = paths.SCANNER_OUTPUT_PATH + "/"
     combined_out += out_name + ".dual_out.txt"
 
     is_archive = tarfile.is_tarfile(sys.argv[1]) or zipfile.is_zipfile(
         sys.argv[1])
-    parse_output(sys.argv[1], is_archive, F_out, N_out, opts)
-    #subprocess.call(["rm", F_out])
-    #subprocess.call(["rm", N_out])
-    #print(str(parse_combined_file(combined_out)))
+    parse_output(sys.argv[1], is_archive, F_out, N_out, checksum_out, opts)
     scan_list = parse_combined_file(combined_out)
     clean() #get rid of the internal files since we no longer need them
     if not scan_list:
         raise Exception(
             "Failed to parse FOSSology and Ninka scanner output.")
     else:
-        print(generate_json(scan_list))
+        #print(generate_json(scan_list))
+        print(make_json(scan_list)) #this is the do_spdx custom-output
