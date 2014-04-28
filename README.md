@@ -15,15 +15,6 @@ This project may be integrated with other tools in the SPDX ecosystem. In partic
 * Attempt to optimize FOSSology execution time
 * Web front-end
 
-Copyright
----------
-Code and documentation are jointly copyrighted by:
-* [Doug Richardson] (https://github.com/Doug-CaptainAwesome-Richardson)
-* [James Thompson] (https://github.com/jthomp24)
-* [Jon von Kampen] (https://github.com/jvonkampen0)
-
-See also our code and documentation [licenses](https://github.com/TheFinks/Fossology-Ninka/blob/master/LICENSE.md).
-
 System Requirements
 -------------------
 In general, your system should meet [FOSSology's performance recommendations](http://www.fossology.org/projects/fossology/wiki/SysConfig), which depend on the maximum file or package size you intend to scan.
@@ -84,3 +75,12 @@ Core Contributors
 * [Jon von Kampen] (https://github.com/jvonkampen0)
 
 overseen by [Matt Germonprez](http://myweb.unomaha.edu/~mgermonprez/vita.html) for CSCI 4900/Internet Systems Development (spring 2014) at the [University of Nebraska at Omaha](http://www.unomaha.edu).
+
+Copyright
+---------
+Code and documentation are jointly copyrighted by:
+* [Doug Richardson] (https://github.com/Doug-CaptainAwesome-Richardson)
+* [James Thompson] (https://github.com/jthomp24)
+* [Jon von Kampen] (https://github.com/jvonkampen0)
+
+See also our code and documentation [licenses](https://github.com/TheFinks/Fossology-Ninka/blob/master/LICENSE.md).
