@@ -8,6 +8,9 @@ The purpose of this project is to develop a tool to generate SPDX documents that
 
 This project may be integrated with other tools in the SPDX ecosystem. In particular, FOSSology-Ninka may be called as part of the [do_spdx()](https://github.com/chaughawout/Do_SPDX/) SPDX document generation process.
 
+### News
+See the [Changelog](https://github.com/TheFinks/Fossology-Ninka/blob/master/CHANGELOG.md) for release details. Although the code base is constantly evolving, official releases will be announced on GitHub and on the [spdx-tech](http://lists.spdx.org/mailman/listinfo/spdx-tech) and [fossology](http://lists.fossology.org/mailman/listinfo/fossology) public mailing lists.
+
 ### Future Goals
 * Integration with third-party SPDX databases and web viewers/editors
 * Generation of complete SPDX documents, including manual conflict resolution between FOSSology and Ninka results
@@ -31,14 +34,15 @@ Installation
 
 Usage
 -----
-`./dual_scan.py file_or_archive options`
+`./dual_scan.py file_or_archive [options]`
 
 **Example:** `./dual_scan.py archive.tar.bz2 -v`
 
 After that the process is entirely automated.  The results will be printed out as a JSON string.
 
 **Options:**
--v activates the verbose mode.  This prints out messages indicating the progress of the process.
+
+ - `-v` activates the verbose mode.  This prints out messages indicating the progress of the process.
 
 **Warning:** The scanning portion of the process can take a long time.
 
