@@ -18,7 +18,17 @@ functions of the main scanner relatively autonomous)
 def make_json(scan_list):
     """
     Creates a JSON object custom-designed for the do_spdx project.
-    The arguments and general logic are the same as the generate_json function
+    The input for this method is a tuple with 5 parts.
+    The tuple contains the name of the scanned package, the name of the
+    scanned fike, the SHA-1 checksum, the license declared (assuming both
+    scanners agree), and the comments section.
+
+    The format is as follows: (package_name, file_name, checksum,
+    license_concluded, comments)
+
+    This method was created because do_spdx requires a very specific format.
+    This format does not allow for package names or comments.  However, those
+    fields are imported incase future do_spdx spec changes to allow for this.
 
     Because of time constraints and the JSON generator being...uncooperative
     This will generate the object manually.
