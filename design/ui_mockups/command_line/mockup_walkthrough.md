@@ -9,7 +9,7 @@ This mockup is divided into four sections.
 
 1. Section 1 is the installation and configuration of necessary files. The bulk of it is how to configure FOSSology.
 2. Section 2 is what it looks like from a user's perspective when using the system from the command line.
-3. Section 3 is what it looks like from a user’s perspective if the system is being used from a web interface.
+3. Section 3 is what it looks like from a user's perspective if the system is being used from a web interface.
 4. Section 4 takes a look "under the hood" and shows how the scanner works point by point.
 
 **Disclaimer:** I am not sure how much configuration of FOSSology is needed to run it in the way our system is intending.  However, until we know otherwise, we are assuming a full installation and configuration are necessary.
@@ -85,7 +85,7 @@ Now to test to see if postgresql is willing to talk to FOSSology.  The default n
 Installing and configuring FOSSology is by FAR the hardest part of getting this system to run.  If you made it this far (for those following along at home), then you are 80% done with getting this mockup to work (if that's your intention).
 
 ![](Fig_A20.png "")
-Ninka is MUCH easier to install then FOSSology.  However, since it's not on Ubuntu’s database (assuming you are using Ubuntu 12.04 as the dev team is), you will need to retrieve it manually. The preferred method is using wget.  The command at the top of the picture (wget [WHERE NINKA'S DOWNLOAD IS]) is how you get the archive holding Ninka.
+Ninka is MUCH easier to install then FOSSology.  However, since it's not on Ubuntu's database (assuming you are using Ubuntu 12.04 as the dev team is), you will need to retrieve it manually. The preferred method is using wget.  The command at the top of the picture (wget [WHERE NINKA'S DOWNLOAD IS]) is how you get the archive holding Ninka.
 
 ![](Fig_A21.png "")
 Next we have to unpack Ninka.  By default it's in whatever directory you used wget in.  If you move it to another directory (such as /usr/share), you may need to sudo the next part, because those directories are read-only by default.  Execute the command in the picture (tar -xjf [NAME OF NINKA RELEASE].tar.bz2) to extract Ninka.  The folder will be the same as whatever the name of the Ninka release is (minus the ".tar.bz2" part).
@@ -133,7 +133,7 @@ Optionally, if time permits (it most likely won't) an SPDX confirmation module (
 Now that we know what to expect as a user, let's look a bit "under the hood" to see how the system is going to work point-by-point.  This is assuming the command-line model of access.  In the final version, all these processes will be handled internally (but they should be modular enough to be taken relatively piecemeal as stand-alone packages for other projects).
 
 ![](Fig_D1.png "")
-The system will first call a process called run_scanners.py, which will run both FOSSology and Ninka on a given file or package.  For simplicity’s sake (and because the package reader is not developed yet), we will use it on ninka.pl
+The system will first call a process called run_scanners.py, which will run both FOSSology and Ninka on a given file or package.  For simplicity's sake (and because the package reader is not developed yet), we will use it on ninka.pl
 
 ![](Fig_D2.png "")
 Here is a look under the hood as to how the dual scanner works.  It's a work in progress and admittedly a bit "messy."  However, this should give some idea as to what is going on when the scanners are called.
@@ -145,7 +145,7 @@ This is the output of the dual scanners.  The top one is Ninka's output and the 
 This combines the output of Ninka and FOSSology into a single simple language that can be processed later.  Because of time constraints, this process has not been created, so no code can be shown.  This is the expected input at the command line level.  Later, files or python lists (depending on what method is chosen) will be passed to the process instead of command line arguments.
 
 ![](Fig_D5.png "")
-This is the tentative expected output of the scan combining process.  The language is akin to Ninka’s and it's meant for machine usability rather than human readability.  The format of the output is PACKAGE_NAME;FILE_NAME;NINKA_LICENSE(S);FOSSOLOGY_LICENSE(S).  If more than one license is found by Ninka or FOSSology, commas will be used to separate it.  The output here indicates that the file was a stand-alone file (hence, the package is NONE), the file is called ninka.pl, and both scanners found Affero GPL version 3 or newer.
+This is the tentative expected output of the scan combining process.  The language is akin to Ninka's and it's meant for machine usability rather than human readability.  The format of the output is PACKAGE_NAME;FILE_NAME;NINKA_LICENSE(S);FOSSOLOGY_LICENSE(S).  If more than one license is found by Ninka or FOSSology, commas will be used to separate it.  The output here indicates that the file was a stand-alone file (hence, the package is NONE), the file is called ninka.pl, and both scanners found Affero GPL version 3 or newer.
 
 ![](Fig_D6.png "")
 The next step is the SPDX generation itself.  There is currently no software that takes the combined output and makes an SPDX out of it (yet).  The makeSPDX process is just a mockup that pretends it was evaluating ninka.pl and writes a document accordingly.  However, the mockup does read from a structural library that may be used later (shown here).  This is a library of variables and basic data structures. (and is a very early version that needs to be revised). However, it shows the idea of some libraries and basic data structures to be called upon to create an SPDX document.
