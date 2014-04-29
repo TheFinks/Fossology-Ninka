@@ -1,8 +1,6 @@
 Data Flow
 =========
 
-Overview
---------
 This document describes the data flow between components of FOSSology-Ninka and third-party components.
 
 ![Data flow diagram](DFD.jpg "Data flow diagram")
