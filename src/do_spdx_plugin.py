@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/python
 
 """
 This method is a plugin for custom methods meant to interact with the do_spdx
