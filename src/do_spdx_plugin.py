@@ -41,21 +41,33 @@ def make_json(scan_list):
         file_name = scan[1]
         checksum = scan[2]
         concluded = scan[3] #This is license declared
-        #comments = scan[4] #not used (although it really should be)
+        comments = scan[4]
 
-        result = "{\"file_level_info\":["
-        result += "{\"FileName\":\"" + file_name + "\","
+        result = "{"
+        result += "\"file_level_info\":"
+        result += "["
+        result += "{"
+        result += "\"FileName\":\"" + file_name + "\","
         result += "\"FileType\":\"SOURCE\","
         result += "\"FileChecksum\":\"" + checksum + "\","
         result += "\"FileChecksumAlgorithm\":\"SHA1\","
+        result += "\"FileLicenseComments\": \"" + comments + "\","
         result += "\"LicenseConcluded\":\"NOASSERTION\","
+        #Does the license declared go on the LicenseConcluded line?
         result += "\"LicenseInfoInFile\":\"NOASSERTION\","
-        result += "\"FileCopyrightText\":\"NOASSERTION<Vtext>\"},],"
+        result += "\"FileCopyrightText\":\"NOASSERTION<Vtext>\""
+        result += "},"
+        result += "],"
 
-        result += "\"extracted_license_info\":["
+        result += "\"extracted_license_info\":"
+        result += "["
         result += "{\"LicenseName\":\"" + concluded + "\","
+        #Putting license declared here temporarily
         result += "\"ExtractedText\":\"NOASSERTION<Vtext>\","
-        result += "\"LicenseCrossReference\":\"NOASSERTION\"},]}"
+        result += "\"LicenseCrossReference\":\"NOASSERTION\""
+        result += "},"
+        result += "]"
+        result += "}"
 
         #Using a list to make the output easier to customize later if needed
         if not results:
@@ -64,8 +76,9 @@ def make_json(scan_list):
             results.append(result)
 
         #This "emulates" a JSON dump
-        output = ""
+        output = "" #add something here if you want to start a JSON wrapper
         for item in results:
             output += item
+        #output += "" #add something here if you want to end a JSON wrapper
 
     return output
