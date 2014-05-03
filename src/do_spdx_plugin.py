@@ -50,7 +50,7 @@ def make_json(scan_list):
         result += "\"FileType\":\"SOURCE\","
         result += "\"FileChecksum\":\"" + checksum + "\","
         result += "\"FileChecksumAlgorithm\":\"SHA1\","
-        result += "\"FileLicenseComments\": \"" + comments + "\","
+        result += "\"FileLicenseComments\":\"" + comments + "\","
         result += "\"LicenseConcluded\":\"" + concluded + "\","
         #Does the license declared go on the LicenseConcluded line?
         result += "\"LicenseInfoInFile\":\"NOASSERTION\","
