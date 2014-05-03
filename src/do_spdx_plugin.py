@@ -43,8 +43,7 @@ def make_json(scan_list):
         concluded = scan[3] #This is license declared
         comments = scan[4]
 
-        result = "{"
-        result += "\"file_level_info\":"
+        result = "\"file_level_info\":"
         result += "["
         result += "{"
         result += "\"FileName\":\"" + file_name + "\","
@@ -52,22 +51,21 @@ def make_json(scan_list):
         result += "\"FileChecksum\":\"" + checksum + "\","
         result += "\"FileChecksumAlgorithm\":\"SHA1\","
         result += "\"FileLicenseComments\": \"" + comments + "\","
-        result += "\"LicenseConcluded\":\"NOASSERTION\","
+        result += "\"LicenseConcluded\":\"" + concluded + "\","
         #Does the license declared go on the LicenseConcluded line?
         result += "\"LicenseInfoInFile\":\"NOASSERTION\","
         result += "\"FileCopyrightText\":\"NOASSERTION<Vtext>\""
         result += "},"
         result += "],"
 
-        result += "\"extracted_license_info\":"
-        result += "["
-        result += "{\"LicenseName\":\"" + concluded + "\","
+        #result += "\"extracted_license_info\":"
+        #result += "["
+        #result += "{\"LicenseName\":\"NOASSERTION\","
         #Putting license declared here temporarily
-        result += "\"ExtractedText\":\"NOASSERTION<Vtext>\","
-        result += "\"LicenseCrossReference\":\"NOASSERTION\""
-        result += "},"
-        result += "]"
-        result += "}"
+        #result += "\"ExtractedText\":\"NOASSERTION<Vtext>\","
+        #result += "\"LicenseCrossReference\":\"NOASSERTION\""
+        #result += "},"
+        #result += "]"
 
         #Using a list to make the output easier to customize later if needed
         if not results:
@@ -76,10 +74,10 @@ def make_json(scan_list):
             results.append(result)
 
     #This "emulates" a JSON dump
-    output = "" #Add something to this if you want to start a JSON wrapper
+    output = "{"
     for item in results:
         output += item
-    #output += "" #Add something to this if you want to finish a JSON wrapper
+    output += "}"
 
 
     return output
