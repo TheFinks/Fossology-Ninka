@@ -75,10 +75,11 @@ def make_json(scan_list):
         else:
             results.append(result)
 
-        #This "emulates" a JSON dump
-        output = "" #add something here if you want to start a JSON wrapper
-        for item in results:
-            output += item
-        #output += "" #add something here if you want to end a JSON wrapper
+    #This "emulates" a JSON dump
+    output = "" #Add something to this if you want to start a JSON wrapper
+    for item in results:
+        output += item
+    #output += "" #Add something to this if you want to finish a JSON wrapper
+
 
     return output
