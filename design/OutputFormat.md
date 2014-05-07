@@ -48,3 +48,20 @@ Later we added a sha-1 checksum so external tools can verify that the file is ge
 a key to make sure).
 do_spdx doesn't take all that data, but it's still passed to the method (since I am pretty sure later versions are 
 going to want to have comments, since their needed object is pre-SPDX-1.2).
+
+The following is what the end user should expect from our programin its current status
+
+{
+	"file_level_info":[
+	{
+		"FileName":"dual_scan.py",
+		"FileType":"SOURCE",
+		"FileChecksum":"12ff6dcb6e1a3cfeb95aabb83eaf25d29832dcde",
+		"FileChecksumAlgorithm":"SHA1",
+		"FileLicenseComments":"#FOSSology (names may not be SPDX standards compliant)",
+		"LicenseConcluded":"Apache-2.0",
+		"LicenseInfoInFile":"NOASSERTION",
+		"FileCopyrightText":"NOASSERTION<Vtext>"
+	},
+	],
+}
