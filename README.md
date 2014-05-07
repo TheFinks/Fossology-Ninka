@@ -1,4 +1,4 @@
-Fossology-Ninka 1.0
+Fossology-Ninka 1.1
 ===================
 
 Overview
